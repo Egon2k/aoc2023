@@ -1,3 +1,5 @@
+import os
+
 numbers = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
 
 def part1(data):
@@ -24,7 +26,7 @@ def part2(data):
     return sum
 
 if __name__ == "__main__":
-    with open('day01/data.txt') as f:
+    with open(os.path.dirname(os.path.realpath(__file__)) + '\\data.txt') as f:
         data = f.read().splitlines()
 
     print(part1(data))
