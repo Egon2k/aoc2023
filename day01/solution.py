@@ -1,3 +1,5 @@
+numbers = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
+
 def part1(data):
     sum = 0
     for line in data:
@@ -9,7 +11,17 @@ def part1(data):
     return sum
 
 def part2(data):
-    pass
+    sum = 0
+    for line in data:
+        digits = []
+        for n, x in enumerate(line):
+            if x.isdigit():
+                digits.append(x)
+            for nn, xx in enumerate(numbers):
+                if line[n:].startswith(xx):
+                    digits.append(nn + 1)   # increase by 1 because index starts at 0
+        sum += int(digits[0]) * 10 + int(digits[-1])
+    return sum
 
 if __name__ == "__main__":
     with open('day01/data.txt') as f:
