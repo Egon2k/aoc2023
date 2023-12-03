@@ -28,23 +28,27 @@ def part1(data):
 
     for row, line in enumerate(data):
         numbers = {}
+        positions = []
         for match in re.finditer(r'[0-9]+',line):
-            if match.group() in numbers:
-                print(match.group())
-            numbers[match.group()] = match.span()
+            positions.append(match.span())
+            if match.group() in numbers: # number was already in that row, add a second position to dict
+                numbers[match.group()].append(match.span())
+            else:
+                numbers[match.group()] = [match.span()]
 
-        for n, pos in numbers.items():
-            for col in range(pos[0], pos[1]):
-                if check_adjacent(grid, row, col):
-                    sum += int(n)
-                    break
+        for n, positions in numbers.items():
+            for position in positions:
+                for col in range(position[0], position[1]):
+                    if check_adjacent(grid, row, col):
+                        sum += int(n)
+                        break
     return sum
                     
 def part2(data):
     pass
 
 if __name__ == "__main__":
-    with open(os.path.dirname(os.path.realpath(__file__)) + '\\data.txt') as f:
+    with open(os.path.dirname(os.path.realpath(__file__)) + '\\testdata.txt') as f:
         data = f.read().splitlines()
 
     print(part1(data))
