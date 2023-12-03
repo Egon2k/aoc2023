@@ -87,10 +87,11 @@ def part2(data):
                             sum += gears[gear_pos] * int(n)
                         else:
                             gears[gear_pos] = int(n)
-    return sum/2 # devide by 2 because each gear was counted twice
+                        break
+    return sum
 
 if __name__ == "__main__":
-    with open(os.path.dirname(os.path.realpath(__file__)) + '\\testdata.txt') as f:
+    with open(os.path.dirname(os.path.realpath(__file__)) + '\\data.txt') as f:
         data = f.read().splitlines()
 
     print(part1(data))
