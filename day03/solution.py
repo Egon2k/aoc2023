@@ -9,7 +9,7 @@ def check_adjacent(grid, row, col):
                 continue
             new_row = row + srow
             new_col = col + scol
-            
+
             if border_row[0] < (new_row) < border_row[1] and \
                border_col[0] < (new_col) < border_col[1]:
                 if not(grid[new_row][new_col].isdigit() or \
@@ -26,68 +26,63 @@ def check_gear(grid, row, col):
                 continue
             new_row = row + srow
             new_col = col + scol
-            
+
             if border_row[0] < (new_row) < border_row[1] and \
                border_col[0] < (new_col) < border_col[1]:
                 if grid[new_row][new_col] == '*':
                     return (new_row, new_col)
     return None
 
+def create_grid(data):
+    grid = []
+    for line in data:
+        grid.append([*line])
+    return grid
 
+def get_numbers_from_line(line):
+    numbers = {}
+    positions = []
+    for match in re.finditer(r'[0-9]+',line):
+        positions.append(match.span())
+        if match.group() in numbers:                                # number can appear several times per row
+            numbers[match.group()].append(match.span())             # append all appearances to list
+        else:
+            numbers[match.group()] = [match.span()]                 # set initial list with first appearance in row
+    return numbers
 
 def part1(data):
     sum = 0
-    
-    grid = []
-    for line in data:
-        grid.append([*line])
+    grid = create_grid(data)
 
     for row, line in enumerate(data):
-        numbers = {}
-        positions = []
-        for match in re.finditer(r'[0-9]+',line):
-            positions.append(match.span())
-            if match.group() in numbers: # number was already in that row, add a second position to dict
-                numbers[match.group()].append(match.span())
-            else:
-                numbers[match.group()] = [match.span()]
+        numbers = get_numbers_from_line(line)
 
         for n, positions in numbers.items():
             for position in positions:
-                for col in range(position[0], position[1]):
+                for col in range(position[0], position[1]):         # loop over each digit
                     if check_adjacent(grid, row, col):
                         sum += int(n)
-                        break
+                        break                                       # it's enough when first adjacent is found
     return sum
-                    
+
 def part2(data):
     sum = 0
+    grid = create_grid(data)
     gears = {}
 
-    grid = []
-    for line in data:
-        grid.append([*line])
-
     for row, line in enumerate(data):
-        numbers = {}
-        positions = []
-        for match in re.finditer(r'[0-9]+',line):
-            positions.append(match.span())
-            if match.group() in numbers: # number was already in that row, add a second position to dict
-                numbers[match.group()].append(match.span())
-            else:
-                numbers[match.group()] = [match.span()]
+        numbers = get_numbers_from_line(line)
 
         for n, positions in numbers.items():
             for position in positions:
-                for col in range(position[0], position[1]):
+                for col in range(position[0], position[1]):         # loop over each digit
                     gear_pos = check_gear(grid, row, col)
                     if gear_pos:
-                        if gear_pos in gears:
-                            sum += gears[gear_pos] * int(n)
+                        if gear_pos in gears:                       # check if position of gear is already in dict
+                            sum += gears[gear_pos] * int(n)         # add to sum
                         else:
-                            gears[gear_pos] = int(n)
-                        break
+                            gears[gear_pos] = int(n)                # if not yet in dict, add
+                        break                                       # it's enough when first gear is found
     return sum
 
 if __name__ == "__main__":
