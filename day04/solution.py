@@ -1,25 +1,34 @@
 import os
 
-def fact(n):
-    fact = 1
-    for i in range(1, n+1):
-        fact = fact * i
-    return fact
-
 def part1(data):
     sum = 0
-    for line in data:
-        winning_numbers = [int(i) for i in line.split('|')[0].split()]
-        my_numbers = [int(i) for i in line.split('|')[1].split()]
 
-        match = len(set(winning_numbers) & set(my_numbers))
-        if match > 0:
-            sum += 2**(match-1)
+    for card in data:
+        winning_numbers = [int(i) for i in card.split('|')[0].split()]
+        my_numbers = [int(i) for i in card.split('|')[1].split()]
+
+        matches = len(set(winning_numbers) & set(my_numbers))
+        if matches > 0:
+            sum += 2**(matches-1)
     return sum
 
 
 def part2(data):
-    pass
+    copies = {}
+    
+    for game_id, _ in enumerate(data):
+        copies[game_id] = 1
+
+    for game_id, card in enumerate(data):
+        winning_numbers = [int(i) for i in card.split('|')[0].split()]
+        my_numbers = [int(i) for i in card.split('|')[1].split()]
+        
+        matches = len(set(winning_numbers) & set(my_numbers))
+    
+        for match in range(matches):
+            copies[game_id + match + 1] += copies[game_id]
+
+    return sum(copies.values())
 
 if __name__ == "__main__":
     with open(os.path.dirname(os.path.realpath(__file__)) + '\\data.txt') as f:
