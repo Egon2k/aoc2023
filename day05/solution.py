@@ -23,17 +23,13 @@ def part1(data):
     for _, map in maps.items():
         for i, seed in enumerate(seeds):
             for rule in map:
-                dest  = rule[0]
-                src   = rule[1]
-                range = rule[2]
-                if src <= seed < (src + range):
+                dest, src, len = rule
+                if src <= seed < (src + len):
                     seeds[i] = dest + (seed - src)
-
     return min(seeds)   
 
 
 def part2(data):
-    seeds, maps = extract_data(data)
     pass
 
 if __name__ == "__main__":
